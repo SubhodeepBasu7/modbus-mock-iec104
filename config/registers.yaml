@@ -1,0 +1,792 @@
+# IEC104 Grid-Operator Interface – Modbus TCP Register Map
+# Each address is a Modbus holding-register address.
+# int32 types occupy two consecutive 16-bit Modbus registers:
+#   address   = high word
+#   address+1 = low word
+
+registers:
+
+  # ── Polling / Config ───────────────────────────────────────────────────────
+  - address: 10000
+    name: PollIntervall_Trigger
+    datatype: BIT
+    byteorder: bigE
+    factor: 1
+    unit: "-"
+    access: write
+    role: config
+    category: polling
+    description: "Trigger for interval-based polling. b0=Deactivated, b1=Cyclic, b2=On data change."
+
+  - address: 10001
+    name: PollIntervall_ms
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: ms
+    access: write
+    role: config
+    category: polling
+    description: "Polling interval in milliseconds. Valid range 500–1200."
+
+  # ── Line current measurements ──────────────────────────────────────────────
+  - address: 10010
+    name: LineCurrent_Frequency
+    datatype: uint16
+    byteorder: bigE
+    factor: 0.01
+    unit: Hz
+    access: read
+    role: ems_measurement
+    category: measurements
+    description: "Current grid frequency in Hz. Raw 5000 = 50.00 Hz."
+
+  - address: 10011
+    name: LineCurrent_Amperage_1
+    datatype: int32
+    byteorder: bigE
+    factor: 1
+    unit: A
+    access: read
+    role: ems_measurement
+    category: measurements
+    description: "Current in phase L1 (A). High word at 10011, low word at 10012."
+
+  - address: 10013
+    name: LineCurrent_Amperage_2
+    datatype: int32
+    byteorder: bigE
+    factor: 1
+    unit: A
+    access: read
+    role: ems_measurement
+    category: measurements
+    description: "Current in phase L2 (A). High word at 10013, low word at 10014."
+
+  - address: 10015
+    name: LineCurrent_Amperage_3
+    datatype: int32
+    byteorder: bigE
+    factor: 1
+    unit: A
+    access: read
+    role: ems_measurement
+    category: measurements
+    description: "Current in phase L3 (A). High word at 10015, low word at 10016."
+
+  - address: 10017
+    name: LineCurrent_Voltage_1
+    datatype: int32
+    byteorder: bigE
+    factor: 1
+    unit: V
+    access: read
+    role: ems_measurement
+    category: measurements
+    description: "Grid voltage phase L1 (V). High word at 10017, low word at 10018."
+
+  - address: 10019
+    name: LineCurrent_Voltage_2
+    datatype: int32
+    byteorder: bigE
+    factor: 1
+    unit: V
+    access: read
+    role: ems_measurement
+    category: measurements
+    description: "Grid voltage phase L2 (V). High word at 10019, low word at 10020."
+
+  - address: 10021
+    name: LineCurrent_Voltage_3
+    datatype: int32
+    byteorder: bigE
+    factor: 1
+    unit: V
+    access: read
+    role: ems_measurement
+    category: measurements
+    description: "Grid voltage phase L3 (V). High word at 10021, low word at 10022."
+
+  # ── Feed-in active power ───────────────────────────────────────────────────
+  - address: 10030
+    name: LineCurrent_FeedIn_ActivePower_P_Total
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kW
+    access: read
+    role: ems_measurement
+    category: feedin_active
+    description: "Total active feed-in power P in kW."
+
+  - address: 10031
+    name: LineCurrent_FeedIn_ActivePower_P_1
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kW
+    access: read
+    role: ems_measurement
+    category: feedin_active
+    description: "Active feed-in power phase L1 in kW."
+
+  - address: 10032
+    name: LineCurrent_FeedIn_ActivePower_P_2
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kW
+    access: read
+    role: ems_measurement
+    category: feedin_active
+    description: "Active feed-in power phase L2 in kW."
+
+  - address: 10033
+    name: LineCurrent_FeedIn_ActivePower_P_3
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kW
+    access: read
+    role: ems_measurement
+    category: feedin_active
+    description: "Active feed-in power phase L3 in kW."
+
+  # ── Feed-in reactive power ─────────────────────────────────────────────────
+  - address: 10040
+    name: LineCurrent_FeedIn_ReactivePower_Q_Total
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVar
+    access: read
+    role: ems_measurement
+    category: feedin_reactive
+    description: "Total reactive feed-in power Q in kVar."
+
+  - address: 10041
+    name: LineCurrent_FeedIn_ReactivePower_Q_1
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVar
+    access: read
+    role: ems_measurement
+    category: feedin_reactive
+    description: "Reactive feed-in power phase L1 in kVar."
+
+  - address: 10042
+    name: LineCurrent_FeedIn_ReactivePower_Q_2
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVar
+    access: read
+    role: ems_measurement
+    category: feedin_reactive
+    description: "Reactive feed-in power phase L2 in kVar."
+
+  - address: 10043
+    name: LineCurrent_FeedIn_ReactivePower_Q_3
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVar
+    access: read
+    role: ems_measurement
+    category: feedin_reactive
+    description: "Reactive feed-in power phase L3 in kVar."
+
+  # ── Feed-in apparent power ─────────────────────────────────────────────────
+  - address: 10050
+    name: LineCurrent_FeedIn_ApparentPower_S_Total
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVA
+    access: read
+    role: ems_measurement
+    category: feedin_apparent
+    description: "Total apparent feed-in power S in kVA (derived: sqrt(P²+Q²))."
+
+  - address: 10051
+    name: LineCurrent_FeedIn_ApparentPower_S_1
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVA
+    access: read
+    role: ems_measurement
+    category: feedin_apparent
+    description: "Apparent feed-in power phase L1 in kVA."
+
+  - address: 10052
+    name: LineCurrent_FeedIn_ApparentPower_S_2
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVA
+    access: read
+    role: ems_measurement
+    category: feedin_apparent
+    description: "Apparent feed-in power phase L2 in kVA."
+
+  - address: 10053
+    name: LineCurrent_FeedIn_ApparentPower_S_3
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVA
+    access: read
+    role: ems_measurement
+    category: feedin_apparent
+    description: "Apparent feed-in power phase L3 in kVA."
+
+  # ── Generic power measurements ─────────────────────────────────────────────
+  - address: 10060
+    name: ActivePower_P
+    datatype: int32
+    byteorder: bigE
+    factor: 1
+    unit: kW
+    access: read
+    role: ems_measurement
+    category: power
+    description: "Current active power in kW. High word at 10060, low word at 10061."
+
+  - address: 10062
+    name: ReactivePower_Q
+    datatype: int32
+    byteorder: bigE
+    factor: 1
+    unit: kVar
+    access: read
+    role: ems_measurement
+    category: power
+    description: "Current reactive power in kVar. High word at 10062, low word at 10063."
+
+  - address: 10064
+    name: ApparentPower_S
+    datatype: int32
+    byteorder: bigE
+    factor: 1
+    unit: kVA
+    access: read
+    role: ems_measurement
+    category: power
+    description: "Current apparent power in kVA (derived: sqrt(P²+Q²)). High word at 10064, low word at 10065."
+
+  - address: 10066
+    name: ReactivePower_Q_Available
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVar
+    access: read
+    role: ems_measurement
+    category: power
+    description: "Theoretically available maximum reactive power in kVar."
+
+  - address: 10067
+    name: ActivePower_P_Available
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kW
+    access: read
+    role: ems_measurement
+    category: power
+    description: "Theoretically available maximum active power in kW."
+
+  - address: 10070
+    name: CosPhi
+    datatype: uint16
+    byteorder: bigE
+    factor: 0.001
+    unit: "-"
+    access: read
+    role: ems_measurement
+    category: power
+    description: "Current CosPhi. Engineering 0.95 → raw 950 (stored as integer × 1000, factor 0.001)."
+
+  # ── State of charge ────────────────────────────────────────────────────────
+  - address: 10080
+    name: StateOfCharge_MAX_Wh
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: Wh
+    access: read
+    role: ems_measurement
+    category: soc
+    description: "Nominal storage energy capacity in Wh."
+
+  - address: 10082
+    name: StateOfCharge_Available_Wh
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: Wh
+    access: read
+    role: ems_measurement
+    category: soc
+    description: "Current available energy capacity in Wh."
+
+  - address: 10083
+    name: StateOfCharge_Available_percent
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: "%"
+    access: read
+    role: ems_measurement
+    category: soc
+    description: "Current available energy capacity in percent."
+
+  - address: 10084
+    name: StateOfCharge_Unused_Wh
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: Wh
+    access: read
+    role: ems_measurement
+    category: soc
+    description: "Current unused energy capacity in Wh."
+
+  - address: 10085
+    name: StateOfCharge_Unused_percent
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: "%"
+    access: read
+    role: ems_measurement
+    category: soc
+    description: "Current unused energy capacity in percent."
+
+  # ── Reactive power Q(U) setpoints & feedback ──────────────────────────────
+  - address: 11000
+    name: ReactivePower_SetPoint_QU_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "Q(U) reactive power provision active. 1=ON, 0=OFF."
+
+  - address: 11001
+    name: ReactivePower_Feedback_QU_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for Q(U) command active and implemented."
+
+  - address: 11002
+    name: ReactivePower_SetPoint_QU_Voltage
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kV
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "Reference voltage setpoint for Q(U) in kV."
+
+  - address: 11003
+    name: ReactivePower_Feedback_QU_Voltage
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kV
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for Q(U) reference voltage in kV."
+
+  # ── Reactive power Q setpoint in kVar ─────────────────────────────────────
+  - address: 11010
+    name: ReactivePower_SetPoint_Q_kVar_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "Reactive power Q setpoint in kVar active. 1=ON, 0=OFF."
+
+  - address: 11011
+    name: ReactivePower_Feedback_Q_kVar_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for Q setpoint in kVar active and implemented."
+
+  - address: 11012
+    name: ReactivePower_SetPoint_Q_kVar
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVar
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "Reactive power Q setpoint in kVar."
+
+  - address: 11013
+    name: ReactivePower_Feedback_Q_kVar
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kVar
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for reactive power Q setpoint in kVar."
+
+  # ── Reactive power Q setpoint in % ────────────────────────────────────────
+  - address: 11020
+    name: ReactivePower_SetPoint_Q_percent_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "Reactive power Q setpoint in percent active. 1=ON, 0=OFF."
+
+  - address: 11021
+    name: ReactivePower_Feedback_Q_percent_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for Q setpoint in percent active and implemented."
+
+  - address: 11022
+    name: ReactivePower_SetPoint_Q_percent
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: "%"
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "Reactive power Q setpoint in percent (0–100)."
+
+  - address: 11023
+    name: ReactivePower_Feedback_Q_10_percent
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: "%"
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for Q setpoint in percent, 10% steps."
+
+  - address: 11024
+    name: ReactivePower_Feedback_Q_1_percent
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: "%"
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for Q setpoint in percent, 1% steps."
+
+  # ── CosPhi setpoints & feedback ───────────────────────────────────────────
+  - address: 11030
+    name: CosPhi_SetPoint_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "CosPhi setpoint active. 1=ON, 0=OFF."
+
+  - address: 11031
+    name: CosPhi_Feedback_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for CosPhi setpoint active and implemented."
+
+  - address: 11032
+    name: CosPhi_SetPoint
+    datatype: uint16
+    byteorder: bigE
+    factor: 0.001
+    unit: "-"
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "CosPhi setpoint. Engineering 0.95 → raw 950 (stored as integer × 1000, factor 0.001)."
+
+  - address: 11033
+    name: CosPhi_Feedback
+    datatype: uint16
+    byteorder: bigE
+    factor: 0.001
+    unit: "-"
+    access: read
+    role: feedback
+    category: feedback
+    description: "CosPhi setpoint feedback. Engineering 0.95 → raw 950 (stored as integer × 1000, factor 0.001)."
+
+  # ── Active power P setpoints & feedback ───────────────────────────────────
+  - address: 11040
+    name: ActivePower_SetPoint_P_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "Active power P setpoint active. 1=ON, 0=OFF."
+
+  - address: 11041
+    name: ActivePower_Feedback_P_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for active power P setpoint active and implemented."
+
+  - address: 11042
+    name: ActivePower_SetPoint_P_kW
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kW
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "Active power P setpoint in kW."
+
+  - address: 11043
+    name: ActivePower_Feedback_P_kW
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: kW
+    access: read
+    role: feedback
+    category: feedback
+    description: "Active power P setpoint feedback in kW."
+
+  # ── Active power P setpoints in % ─────────────────────────────────────────
+  - address: 11050
+    name: ActivePower_SetPoint_P_percent_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "Active power P setpoint in percent active. 1=ON, 0=OFF."
+
+  - address: 11051
+    name: ActivePower_Feedback_P_percent_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for active power P percent setpoint active and implemented."
+
+  - address: 11052
+    name: ActivePower_SetPoint_P_percent
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: "%"
+    access: write
+    role: grid_operator_command
+    category: setpoints
+    description: "Active power P setpoint in percent (0–100)."
+
+  - address: 11053
+    name: ActivePower_Feedback_P_10_percent
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: "%"
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for P setpoint in percent, 10% steps."
+
+  - address: 11054
+    name: ActivePower_Feedback_P_1_percent
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: "%"
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for P setpoint in percent, 1% steps."
+
+  # ── Control stage setpoints & feedback ────────────────────────────────────
+  - address: 11060
+    name: ControlStage_SetPoint_percent_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: control_stage
+    description: "Control-stage active power limitation active. 1=ON, 0=OFF."
+
+  - address: 11061
+    name: ControlStage_Feedback_percent_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "Feedback for control-stage power limitation active."
+
+  - address: 11062
+    name: ControlStage_SetPoint_percent
+    datatype: BIT
+    byteorder: bigE
+    factor: 1
+    unit: "%"
+    access: write
+    role: grid_operator_command
+    category: control_stage
+    description: "Bitfield control stage. b0=0%, b1=30%, b2=60%, b3=100%."
+
+  - address: 11063
+    name: ControlStage_Feedback_percent
+    datatype: BIT
+    byteorder: bigE
+    factor: 1
+    unit: "%"
+    access: read
+    role: feedback
+    category: feedback
+    description: "Bitfield feedback control stage. b0=0%, b1=30%, b2=60%, b3=100%."
+
+  # ── Individual control stage ON/OFF ───────────────────────────────────────
+  - address: 11070
+    name: ControlStage_0_percent_SetPoint_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: control_stage
+    description: "0% curtailment command active."
+
+  - address: 11071
+    name: ControlStage_0_percent_Feedback_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "0% curtailment feedback active."
+
+  - address: 11072
+    name: ControlStage_30_percent_SetPoint_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: control_stage
+    description: "30% curtailment command active."
+
+  - address: 11073
+    name: ControlStage_30_percent_Feedback_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "30% curtailment feedback active."
+
+  - address: 11074
+    name: ControlStage_60_percent_SetPoint_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: control_stage
+    description: "60% curtailment command active."
+
+  - address: 11075
+    name: ControlStage_60_percent_Feedback_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "60% curtailment feedback active."
+
+  - address: 11076
+    name: ControlStage_100_percent_SetPoint_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: write
+    role: grid_operator_command
+    category: control_stage
+    description: "100% control stage command active."
+
+  - address: 11077
+    name: ControlStage_100_percent_Feedback_ON_OFF
+    datatype: uint16
+    byteorder: bigE
+    factor: 1
+    unit: An/Aus
+    access: read
+    role: feedback
+    category: feedback
+    description: "100% control stage feedback active."

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modbus IEC104 Mock Interface</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Modbus IEC104 Mock Interface</h1>
+    <div id="status-bar">
+      <span id="status-text">Connecting…</span>
+      <span id="last-update"></span>
+    </div>
+  </header>
+
+  <main>
+    <!-- ── Grid Operator Commands (writable) ───────────────────────── -->
+    <section id="sec-setpoints">
+      <h2>Grid Operator Setpoints &amp; Commands</h2>
+      <p class="note">
+        These registers are written by the grid operator (via this UI).
+        Active power <strong>P</strong> and reactive power <strong>Q</strong>
+        are the real setpoints; apparent power <strong>S = √(P²+Q²)</strong>
+        is a derived/measured value and is not a setpoint.
+      </p>
+      <div id="grid-setpoints"></div>
+    </section>
+
+    <!-- ── Feedback registers (read-only) ──────────────────────────── -->
+    <section id="sec-feedback">
+      <h2>Feedback Registers (EMS Response)</h2>
+      <div id="grid-feedback"></div>
+    </section>
+
+    <!-- ── EMS Measurements (read-only) ────────────────────────────── -->
+    <section id="sec-measurements">
+      <h2>Live EMS Measurements</h2>
+      <div id="grid-measurements"></div>
+    </section>
+
+    <!-- ── Config / Polling ────────────────────────────────────────── -->
+    <section id="sec-config">
+      <h2>Polling / Config Registers</h2>
+      <div id="grid-config"></div>
+    </section>
+
+    <!-- ── EMS Simulation Helper ───────────────────────────────────── -->
+    <section id="sec-ems-sim">
+      <h2>EMS Simulation Helper</h2>
+      <p class="note">
+        Quickly write typical EMS measurement values.
+        <em>Apparent power S is calculated automatically as √(P²+Q²).</em>
+      </p>
+      <div class="sim-form">
+        <label>Active Power P (kW)<input id="sim-p" type="number" value="500" /></label>
+        <label>Reactive Power Q (kVar)<input id="sim-q" type="number" value="200" /></label>
+        <label>Voltage (V)<input id="sim-v" type="number" value="400" /></label>
+        <label>Current (A)<input id="sim-i" type="number" value="100" /></label>
+        <label>Frequency (Hz)<input id="sim-f" type="number" step="0.01" value="50.00" /></label>
+        <label>SoC (%)<input id="sim-soc" type="number" min="0" max="100" value="80" /></label>
+        <button id="sim-btn">Send to EMS registers</button>
+      </div>
+    </section>
+
+    <!-- ── Raw register table ──────────────────────────────────────── -->
+    <section id="sec-raw">
+      <h2>Raw Register Table</h2>
+      <table id="raw-table">
+        <thead>
+          <tr>
+            <th>Address</th>
+            <th>Name</th>
+            <th>Raw (hex)</th>
+            <th>Raw (dec)</th>
+            <th>Engineering</th>
+            <th>Unit</th>
+            <th>Access</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody id="raw-tbody"></tbody>
+      </table>
+    </section>
+
+    <!-- ── Write history ───────────────────────────────────────────── -->
+    <section id="sec-history">
+      <h2>Write History (last 50)</h2>
+      <table id="history-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Source</th>
+            <th>Address</th>
+            <th>Name</th>
+            <th>Old raw</th>
+            <th>New raw</th>
+            <th>Eng. value</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

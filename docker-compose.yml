@@ -1,0 +1,21 @@
+services:
+  modbus-interface-sim:
+    build: .
+    container_name: modbus-interface-sim
+    ports:
+      - "5020:5020"
+      - "8000:8000"
+    environment:
+      MODBUS_HOST: "0.0.0.0"
+      MODBUS_PORT: "5020"
+      WEB_HOST: "0.0.0.0"
+      WEB_PORT: "8000"
+      UNIT_ID: "1"
+      ENFORCE_ACCESS_CONTROL: "false"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
