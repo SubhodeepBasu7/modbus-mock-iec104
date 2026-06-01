@@ -16,34 +16,24 @@
   </header>
 
   <main>
-    <!-- ── Grid Operator Commands (writable) ───────────────────────── -->
-    <section id="sec-setpoints">
-      <h2>Grid Operator Setpoints &amp; Commands</h2>
-      <p class="note">
-        These registers are written by the grid operator (via this UI).
-        Active power <strong>P</strong> and reactive power <strong>Q</strong>
-        are the real setpoints; apparent power <strong>S = √(P²+Q²)</strong>
-        is a derived/measured value and is not a setpoint.
-      </p>
-      <div id="grid-setpoints"></div>
-    </section>
-
-    <!-- ── Feedback registers (read-only) ──────────────────────────── -->
-    <section id="sec-feedback">
-      <h2>Feedback Registers (EMS Response)</h2>
-      <div id="grid-feedback"></div>
-    </section>
-
-    <!-- ── EMS Measurements (read-only) ────────────────────────────── -->
-    <section id="sec-measurements">
-      <h2>Live EMS Measurements</h2>
-      <div id="grid-measurements"></div>
-    </section>
-
-    <!-- ── Config / Polling ────────────────────────────────────────── -->
-    <section id="sec-config">
-      <h2>Polling / Config Registers</h2>
-      <div id="grid-config"></div>
+    <!-- ── Register panes ───────────────────────────────────────────── -->
+    <section id="sec-register-panes">
+      <div class="pane-split">
+        <section class="pane pane-left">
+          <h2>Monitoring Registers (10xxx)</h2>
+          <p class="note">
+            Left pane: registers written by EMS.
+          </p>
+          <div id="grid-monitoring"></div>
+        </section>
+        <section class="pane pane-right">
+          <h2>Control Registers (11xxx)</h2>
+          <p class="note">
+            Right pane: control registers for command/setpoint and feedback.
+          </p>
+          <div id="grid-control"></div>
+        </section>
+      </div>
     </section>
 
     <!-- ── EMS Simulation Helper ───────────────────────────────────── -->

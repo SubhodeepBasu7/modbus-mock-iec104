@@ -6,6 +6,10 @@
 
 // ── Track which inputs are currently focused so we don't overwrite them ──────
 const focusedAddresses = new Set();
+const MONITORING_RANGE_START = 10000;
+const MONITORING_RANGE_END = 10999;
+const CONTROL_RANGE_START = 11000;
+const CONTROL_RANGE_END = 11999;
 
 // ── BIT-field bit labels ──────────────────────────────────────────────────────
 const BIT_LABELS = {
@@ -270,17 +274,21 @@ function updateCard(rv) {
 
 function renderAll(registers) {
   const sections = {
-    grid_operator_command: document.getElementById("grid-setpoints"),
-    feedback: document.getElementById("grid-feedback"),
-    ems_measurement: document.getElementById("grid-measurements"),
-    config: document.getElementById("grid-config"),
+    monitoring: document.getElementById("grid-monitoring"),
+    control: document.getElementById("grid-control"),
   };
 
   if (firstRender) {
     Object.values(sections).forEach((el) => (el.innerHTML = ""));
     for (const rv of registers) {
-      const role = rv.definition.role;
-      const target = sections[role] || sections.ems_measurement;
+      const addr = rv.definition.address;
+      let target = null;
+      if (addr >= MONITORING_RANGE_START && addr <= MONITORING_RANGE_END) {
+        target = sections.monitoring;
+      } else if (addr >= CONTROL_RANGE_START && addr <= CONTROL_RANGE_END) {
+        target = sections.control;
+      }
+      if (!target) continue;
       target.appendChild(buildCard(rv));
     }
     firstRender = false;
