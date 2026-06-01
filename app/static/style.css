@@ -42,6 +42,24 @@ main {
   gap: 1.5rem;
 }
 
+#sec-register-panes {
+  box-shadow: none;
+  background: transparent;
+}
+
+.pane-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.pane {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
 /* ── Sections ────────────────────────────────────────── */
 section {
   background: #fff;
@@ -67,14 +85,18 @@ section h2 {
 }
 
 /* ── Register card grid ──────────────────────────────── */
-#grid-setpoints,
-#grid-feedback,
-#grid-measurements,
-#grid-config {
+#grid-monitoring,
+#grid-control {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 0.75rem;
   padding: 1rem 1.25rem;
+}
+
+@media (max-width: 1100px) {
+  .pane-split {
+    grid-template-columns: 1fr;
+  }
 }
 
 .reg-card {
