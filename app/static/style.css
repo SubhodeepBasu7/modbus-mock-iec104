@@ -1,0 +1,253 @@
+/* ─────────────────────────────────────────────────────
+   Modbus IEC104 Mock Interface – Stylesheet
+   ───────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: #f0f2f5;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+header {
+  background: #1a252f;
+  color: #ecf0f1;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+header h1 { font-size: 1.2rem; font-weight: 600; }
+
+#status-bar { display: flex; align-items: center; gap: 1rem; font-size: 0.85rem; }
+#status-text { font-weight: 600; }
+#last-update { color: #95a5a6; }
+
+/* ── Main layout ─────────────────────────────────────── */
+main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Sections ────────────────────────────────────────── */
+section {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+section h2 {
+  background: #2c3e50;
+  color: #ecf0f1;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.note {
+  padding: 0.6rem 1.25rem;
+  background: #eaf4fb;
+  border-left: 4px solid #3498db;
+  font-size: 0.85rem;
+  color: #2c3e50;
+}
+
+/* ── Register card grid ──────────────────────────────── */
+#grid-setpoints,
+#grid-feedback,
+#grid-measurements,
+#grid-config {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.reg-card {
+  border: 1px solid #dce3e8;
+  border-radius: 6px;
+  padding: 0.75rem;
+  background: #fafbfc;
+  transition: border-color 0.15s;
+}
+.reg-card:hover { border-color: #3498db; }
+
+.reg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.3rem;
+}
+
+.reg-name { font-weight: 600; font-size: 0.82rem; word-break: break-word; }
+.reg-addr { font-size: 0.75rem; color: #7f8c8d; white-space: nowrap; margin-left: 4px; }
+.reg-desc { font-size: 0.75rem; color: #666; margin-bottom: 0.5rem; line-height: 1.4; }
+
+.reg-value-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.reg-unit { font-size: 0.78rem; color: #7f8c8d; }
+
+/* ── Inputs ──────────────────────────────────────────── */
+.reg-input {
+  width: 90px;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: #fff;
+}
+.reg-input:focus { outline: 2px solid #3498db; border-color: transparent; }
+
+.input-wrap button {
+  padding: 0.3rem 0.5rem;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.input-wrap button:hover { background: #219a52; }
+
+/* ── Toggle button ───────────────────────────────────── */
+.toggle {
+  padding: 0.35rem 1rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.82rem;
+  transition: background 0.15s;
+}
+.toggle.on  { background: #27ae60; color: #fff; }
+.toggle.off { background: #c0392b; color: #fff; }
+
+/* ── BIT checkboxes ──────────────────────────────────── */
+.bit-wrap { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.bit-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  background: #eee;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ── Read-only value ─────────────────────────────────── */
+.ro-value {
+  font-family: "Cascadia Code", "Fira Mono", monospace;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2980b9;
+}
+
+/* ── EMS simulation form ─────────────────────────────── */
+.sim-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  align-items: flex-end;
+}
+.sim-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  color: #555;
+  gap: 0.25rem;
+}
+.sim-form input {
+  width: 100px;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+.sim-form button {
+  padding: 0.45rem 1.2rem;
+  background: #2980b9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.sim-form button:hover { background: #1f6391; }
+
+/* ── Raw table ───────────────────────────────────────── */
+#sec-raw { overflow-x: auto; }
+
+#raw-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+#raw-table th {
+  background: #34495e;
+  color: #ecf0f1;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  white-space: nowrap;
+}
+#raw-table td {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid #ecf0f1;
+}
+#raw-table tr:hover td { background: #f8f9fa; }
+.mono { font-family: monospace; }
+
+/* ── History table ───────────────────────────────────── */
+#sec-history { overflow-x: auto; }
+
+#history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+#history-table th {
+  background: #34495e;
+  color: #ecf0f1;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+#history-table td {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid #ecf0f1;
+}
+#history-table tr:hover td { background: #f8f9fa; }
+
+/* ── Source badges ───────────────────────────────────── */
+.source-badge {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.source-ui     { background: #3498db; color: #fff; }
+.source-api    { background: #9b59b6; color: #fff; }
+.source-modbus { background: #e67e22; color: #fff; }
