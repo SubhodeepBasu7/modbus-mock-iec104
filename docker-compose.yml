@@ -1,21 +1,22 @@
 services:
-  modbus-interface-sim:
+  modbus-iec104-ui:
     build: .
-    container_name: modbus-interface-sim
+    container_name: modbus-iec104-ui
     ports:
-      - "5020:5020"
-      - "8000:8000"
+      - "8005:8005"
     environment:
-      MODBUS_HOST: "0.0.0.0"
+      MODBUS_HOST: "localhost"
       MODBUS_PORT: "5020"
       WEB_HOST: "0.0.0.0"
-      WEB_PORT: "8000"
+      WEB_PORT: "8005"
       UNIT_ID: "1"
+      REGISTER_CSV_PATH: "/app/config/registers.csv"
       ENFORCE_ACCESS_CONTROL: "false"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8005/api/health"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
+    network_mode: "host"

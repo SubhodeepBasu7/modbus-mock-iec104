@@ -1,8 +1,4 @@
-"""Application entry-point.
-
-Starts the Modbus TCP server and the FastAPI/Uvicorn web server concurrently
-inside the same asyncio event loop.
-"""
+"""Application entry-point for the remote Modbus visualization UI."""
 from __future__ import annotations
 
 import asyncio
@@ -12,9 +8,8 @@ from pathlib import Path
 
 import uvicorn
 
-from app.modbus_server import run_modbus_server
 from app.register_map import load_registers
-from app.register_store import RegisterStore
+from app.remote_store import RemoteModbusRegisterStore
 from app.web import create_app
 
 logging.basicConfig(
@@ -23,20 +18,33 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-_CONFIG_PATH = Path(__file__).parent.parent / "config" / "registers.yaml"
+_DEFAULT_CONFIG_PATH = Path(__file__).parent.parent / "config" / "registers.csv"
+
+
+def _resolve_register_config_path() -> Path:
+    env_path = os.getenv("REGISTER_CSV_PATH", "").strip()
+    if env_path:
+        return Path(env_path)
+    return _DEFAULT_CONFIG_PATH
 
 
 async def _main() -> None:
-    # Load register definitions from YAML
-    definitions = load_registers(_CONFIG_PATH)
+    definitions = load_registers(_resolve_register_config_path())
 
-    # Build the shared register store
-    store = RegisterStore()
+    modbus_host = os.getenv("MODBUS_HOST", "localhost")
+    modbus_port = int(os.getenv("MODBUS_PORT", "5020"))
+    unit_id = int(os.getenv("UNIT_ID", "1"))
+
+    store = RemoteModbusRegisterStore(
+        host=modbus_host,
+        port=modbus_port,
+        unit_id=unit_id,
+    )
     store.initialize(definitions)
 
     # Build the FastAPI application
     web_host = os.getenv("WEB_HOST", "0.0.0.0")
-    web_port = int(os.getenv("WEB_PORT", "8000"))
+    web_port = int(os.getenv("WEB_PORT", "8005"))
     app = create_app(store, definitions)
 
     # Configure uvicorn (log_level must stay compatible with root logger)
@@ -53,11 +61,13 @@ async def _main() -> None:
         "Starting web server on http://%s:%d", web_host, web_port
     )
 
-    # Run Modbus TCP server and web server side-by-side
-    await asyncio.gather(
-        run_modbus_server(store),
-        uv_server.serve(),
+    logger.info(
+        "Connecting UI to Modbus TCP server at %s:%d (unit_id=%d)",
+        modbus_host,
+        modbus_port,
+        unit_id,
     )
+    await uv_server.serve()
 
 
 def main() -> None:

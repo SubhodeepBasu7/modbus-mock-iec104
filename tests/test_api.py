@@ -18,7 +18,7 @@ from app.register_map import load_registers
 from app.register_store import RegisterStore
 from app.web import create_app
 
-_CONFIG = Path(__file__).parent.parent / "config" / "registers.yaml"
+_CONFIG = Path(__file__).parent.parent / "config" / "registers.csv"
 
 
 @pytest.fixture(scope="module")
@@ -111,10 +111,10 @@ def test_write_cosphi_factor(client: TestClient) -> None:
 def test_write_int32_register(client: TestClient) -> None:
     """Write an int32 measurement register via engineering value."""
     resp = client.post(
-        "/api/registers/10060", json={"value": 500, "source": "api"}
+        "/api/registers/10050", json={"value": 500, "source": "api"}
     )
     assert resp.status_code == 200
-    resp2 = client.get("/api/registers/10060")
+    resp2 = client.get("/api/registers/10050")
     body = resp2.json()
     assert body["engineering_value"] == pytest.approx(500.0)
     assert isinstance(body["raw_value"], list), "int32 raw_value must be [high, low]"
@@ -123,7 +123,7 @@ def test_write_int32_register(client: TestClient) -> None:
 
 def test_write_negative_int32(client: TestClient) -> None:
     resp = client.post(
-        "/api/registers/10062", json={"value": -200, "source": "api"}
+        "/api/registers/10052", json={"value": -200, "source": "api"}
     )
     assert resp.status_code == 200
     resp2 = client.get("/api/registers/10062")
@@ -221,11 +221,11 @@ def test_ems_simulation(client: TestClient) -> None:
     assert body["status"] == "ok"
 
     # Verify active power written
-    r = client.get("/api/registers/10060")
+    r = client.get("/api/registers/10050")
     assert r.json()["engineering_value"] == pytest.approx(500.0)
 
     # Verify SoC written
-    r = client.get("/api/registers/10083")
+    r = client.get("/api/registers/10073")
     assert r.json()["engineering_value"] == pytest.approx(80.0)
 
     # Verify frequency (factor 0.01)

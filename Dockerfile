@@ -1,7 +1,7 @@
 FROM debian:bookworm-slim
 
 LABEL maintainer="modbus-mock-iec104"
-LABEL description="Controllable Modbus TCP server simulating an IEC104 grid-operator interface"
+LABEL description="Web UI for visualizing and writing a remote GGW3 Modbus TCP register map"
 
 # Install system packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -36,16 +36,16 @@ RUN chown -R appuser:appuser /app
 # Switch to non-root user
 USER appuser
 
-# Expose Modbus TCP and Web UI ports
-EXPOSE 5020
-EXPOSE 8000
+# Expose Web UI port
+EXPOSE 8005
 
 # Environment defaults (overridable via docker-compose or -e)
-ENV MODBUS_HOST=0.0.0.0
+ENV MODBUS_HOST=localhost
 ENV MODBUS_PORT=5020
 ENV WEB_HOST=0.0.0.0
-ENV WEB_PORT=8000
+ENV WEB_PORT=8005
 ENV UNIT_ID=1
 ENV ENFORCE_ACCESS_CONTROL=false
+ENV REGISTER_CSV_PATH=/app/config/registers.csv
 
 CMD ["python", "-m", "app.main"]

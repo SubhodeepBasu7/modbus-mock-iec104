@@ -18,6 +18,7 @@ class RegisterDefinition(BaseModel):
     role: str              # config | ems_measurement | feedback | grid_operator_command
     category: Optional[str] = None
     default: float = 0.0
+    polling_interval_ms: Optional[int] = None
 
     @field_validator("datatype")
     @classmethod

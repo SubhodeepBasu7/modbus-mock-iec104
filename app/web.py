@@ -10,7 +10,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.register_map import load_registers
 from app.register_store import RegisterStore
 from app.schemas import (
     BulkWriteRequest,
@@ -22,8 +21,6 @@ from app.schemas import (
 )
 
 _STATIC_DIR = Path(__file__).parent / "static"
-_CONFIG_PATH = Path(__file__).parent.parent / "config" / "registers.yaml"
-
 _ENFORCE_AC = os.getenv("ENFORCE_ACCESS_CONTROL", "false").lower() == "true"
 
 
@@ -39,8 +36,10 @@ def create_app(store: RegisterStore, definitions: List[RegisterDefinition]) -> F
     def health() -> dict:
         return {
             "status": "ok",
+            "mode": "remote-modbus-ui",
+            "modbus_host": os.getenv("MODBUS_HOST", "localhost"),
             "modbus_port": int(os.getenv("MODBUS_PORT", "5020")),
-            "web_port": int(os.getenv("WEB_PORT", "8000")),
+            "web_port": int(os.getenv("WEB_PORT", "8005")),
             "unit_id": int(os.getenv("UNIT_ID", "1")),
             "register_count": len(definitions),
             "enforce_access_control": _ENFORCE_AC,
@@ -132,9 +131,9 @@ def create_app(store: RegisterStore, definitions: List[RegisterDefinition]) -> F
         freq_raw = int(round(body.frequency_hz / 0.01))  # factor 0.01 → raw
 
         updates = {
-            10060: p,            # ActivePower_P  (int32, kW)
-            10062: q,            # ReactivePower_Q (int32, kVar)
-            10064: s,            # ApparentPower_S (int32, kVA)
+            10050: p,            # ActivePower_P  (int32, kW)
+            10052: q,            # ReactivePower_Q (int32, kVar)
+            10054: s,            # ApparentPower_S (int32, kVA)
             # Frequency: engineering value, factor applied inside store
             10010: body.frequency_hz,
             # Voltages (all three phases same for simplicity)
@@ -146,21 +145,21 @@ def create_app(store: RegisterStore, definitions: List[RegisterDefinition]) -> F
             10013: body.current_a,
             10015: body.current_a,
             # SoC
-            10083: body.soc_percent,
-            10085: 100.0 - body.soc_percent,
+            10073: body.soc_percent,
+            10075: 100.0 - body.soc_percent,
             # Feed-in totals (convenience copies)
-            10030: abs(p),
-            10031: abs(p) / 3,
-            10032: abs(p) / 3,
-            10033: abs(p) / 3,
-            10040: abs(q),
-            10041: abs(q) / 3,
-            10042: abs(q) / 3,
-            10043: abs(q) / 3,
-            10050: s,
-            10051: s / 3,
-            10052: s / 3,
-            10053: s / 3,
+            10023: abs(p),
+            10024: abs(p) / 3,
+            10025: abs(p) / 3,
+            10026: abs(p) / 3,
+            10030: abs(q),
+            10031: abs(q) / 3,
+            10032: abs(q) / 3,
+            10033: abs(q) / 3,
+            10040: s,
+            10041: s / 3,
+            10042: s / 3,
+            10043: s / 3,
         }
 
         errors: dict = {}
