@@ -15,9 +15,6 @@ permissions:
   contents: read
   packages: write
 
-env:
-  IMAGE: ghcr.io/${{ github.repository }}
-
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
@@ -39,6 +36,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set lowercase image name
+        id: image
+        shell: bash
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
       - name: Build and publish latest image
         uses: docker/build-push-action@v6
         with:
@@ -46,7 +50,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.IMAGE }}:latest
+          tags: ${{ steps.image.outputs.image }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
