@@ -2,10 +2,8 @@ services:
   modbus-iec104-ui:
     build: .
     container_name: modbus-iec104-ui
-    ports:
-      - "8005:8005"
     environment:
-      MODBUS_HOST: "localhost"
+      MODBUS_HOST: "192.168.16.110"
       MODBUS_PORT: "5020"
       WEB_HOST: "0.0.0.0"
       WEB_PORT: "8005"
